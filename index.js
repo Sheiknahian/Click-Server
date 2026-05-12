@@ -17,14 +17,11 @@ const client = new MongoClient(uri, {
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }))
+app.use(express.urlencoded({ limit: '50mb', extended: true }))
 app.use(cors());
 
 const port = 5000;
-let array = [];
-app.get('/', (req, res)=>{
-    res.send(array)
-})
 
 async function run() {
   try {
@@ -33,13 +30,16 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
     const photoDB = client.db('photoDB');
     const photoColls = photoDB.collection('photos')
-
+    app.get('/', async (req, res)=>{
+      const cursor = await photoColls.find();
+      const result = await cursor.toArray();
+      res.send(result)
+  })
     app.post('/', async (req, res)=>{
         const imgURL = req.body
-        array.push(imgURL)
         console.log(imgURL);
-        const result = photoColls.insertOne(imgURL)
-        res.send(array)
+        const result = await photoColls.insertOne(imgURL)
+        res.send(imgURL)
     })
 
   }
