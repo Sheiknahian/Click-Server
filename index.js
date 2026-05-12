@@ -36,12 +36,12 @@ async function run() {
       res.send(result)
   })
     app.post('/', async (req, res)=>{
-        const imgURL = req.body
+        const {imageSrc, name} = req.body
         const img = {
-                      image: imgURL.image,
+                      name: name,
+                      image: imageSrc,
                       time: new Date().toLocaleString()
                     }
-        console.log(imgURL);
         const result = await photoColls.insertOne(img)
         res.send(img)
     })
