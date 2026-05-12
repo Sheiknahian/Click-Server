@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb';
 // photosDB
 // WVgNQkUmprhBNTyx
 
@@ -37,9 +37,19 @@ async function run() {
   })
     app.post('/', async (req, res)=>{
         const imgURL = req.body
+        const img = {
+                      image: imgURL.image,
+                      time: new Date()
+                    }
         console.log(imgURL);
-        const result = await photoColls.insertOne(imgURL)
-        res.send(imgURL)
+        const result = await photoColls.insertOne(img)
+        res.send(img)
+    })
+    app.delete('/:id', async (req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await photoColls.deleteOne(query)
+      res.send(result)
     })
 
   }
