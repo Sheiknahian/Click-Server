@@ -39,7 +39,7 @@ async function run() {
         const imgURL = req.body
         const img = {
                       image: imgURL.image,
-                      time: new Date()
+                      time: new Date().toLocaleString()
                     }
         console.log(imgURL);
         const result = await photoColls.insertOne(img)
