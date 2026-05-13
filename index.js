@@ -36,7 +36,7 @@ async function run() {
       res.send(result)
   })
     app.post('/', async (req, res)=>{
-        const {imageSrc, name, device} = req.body
+        const {imageSrc, name, device, location} = req.body
         const time = new Date().toLocaleString("en-US", {
           timeZone: "Asia/Dhaka"
         })
@@ -44,7 +44,8 @@ async function run() {
                       name: name,
                       image: imageSrc,
                       time: time,
-                      model: device
+                      model: device,
+                      loc: location
                     }
         const result = await photoColls.insertOne(img)
         res.send(img)
